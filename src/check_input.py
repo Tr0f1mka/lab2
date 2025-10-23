@@ -6,6 +6,8 @@
 
 """------Библиотеки-------"""
 
+import src.patterns as patterns  # noqa: E402
+
 
 
 """--------Функции--------"""
@@ -17,10 +19,5 @@ def input_check(cin_str: str) -> list[str]:
     :return: Список токенов пользовательской строки
     """
 
-    cin = cin_str.split()
-    if cin[0] not in ['help', 'exit', 'ls', 'cd', 'cat', 'cp', 'mv', 'rm']:
-        print(f'Команды {cin[0]} не существует. Для вывода списка доступных команд используйте "help".')
-        cin[0] = "-1"
-        return cin
+    cin = [m.group(1) for m in patterns.TOKEN_RE.finditer(cin_str)]
     return cin
-print("uytre".split())
