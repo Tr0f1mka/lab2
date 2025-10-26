@@ -189,7 +189,7 @@ def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
         for path in paths:
             print(f"Вы уверены, что хотите удалить папку {path}? [y/n]")
             ans = input("\033[01;38;05;222m").strip()
-            print("\033[0m")
+            print("\033[0m", end='')
             loger.info(ans)
             if ans == 'y':
                 try:

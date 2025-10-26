@@ -8,12 +8,13 @@
 
 """-------Библиотека-------"""
 
-import os                                # noqa: E402
-import logging                           # noqa: E402
-from src.config import LOGGING_CONFIG    # noqa: E402
-import src.check_input as check_input    # noqa: E402
-import src.read_funcs as read_funcs      # noqa: E402
-import src.format_funcs as format_funcs  # noqa: E402
+import os                                  # noqa: E402
+import logging                             # noqa: E402
+from src.config import LOGGING_CONFIG      # noqa: E402
+import src.check_input as check_input      # noqa: E402
+import src.read_funcs as read_funcs        # noqa: E402
+import src.format_funcs as format_funcs    # noqa: E402
+import src.archive_funcs as archive_funcs  # noqa: E402
 
 
 
@@ -43,8 +44,18 @@ def help():
     :return: Данная функция ничего не возвращает
     """
 
-    print('help - выводит справку по функциям')
-    print('exit - завершает программу')
+    print('\033[01;38;05;222mhelp\033[0m - выводит справку по функциям')
+    print('\033[01;38;05;222mexit\033[0m - завершает программу')
+    print('\033[01;38;05;222mls [-l] [<path>]\033[0m - выводит содержимое директории')
+    print('\033[01;38;05;222mcd <path>\033[0m - переходит в указанную директорию')
+    print('\033[01;38;05;222mcat <path>\033[0m - выводит содержимое указанного файла')
+    print('\033[01;38;05;222mcp [-r] <path> <dir>\033[0m - копирует файл(директорию) в dir')
+    print('\033[01;38;05;222mmv <path> <dir>\033[0m - перемещает файл(директорию) в dir')
+    print('\033[01;38;05;222mrm [-r] <path> [<path> ...]\033[0m - удаляет указанные файлы(директории)')
+    print('\033[01;38;05;222mzip <path> <archive.zip>\033[0m - создаёт zip-архив из директории с указанным именем')
+    print('\033[01;38;05;222munzip <path>\033[0m - разархивирует указанный zip-архив в рабочую директорию')
+    print('\033[01;38;05;222mtar <path> <archive.zip>\033[0m - создаёт tar.gz-архив из директории с указанным именем')
+    print('\033[01;38;05;222muntar <path>\033[0m - разархивирует указанный tar.gz-архив в рабочую директорию')
 
     loger.info("Result: Succes")
 
@@ -103,6 +114,34 @@ def main() -> None:
                     case 'rm':
                         format_funcs.rm(os.getcwd(), paths, flags)
 
+                    case 'zip':
+                        if flags:
+                            print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
+                            loger.error("There are no flags for function zip")
+                        else:
+                            archive_funcs.zip(os.getcwd(), paths)
+
+                    case 'unzip':
+                        if flags:
+                            print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
+                            loger.error("There are no flags for function unzip")
+                        else:
+                            archive_funcs.unzip(os.getcwd(), paths)
+
+                    case 'tar':
+                        if flags:
+                            print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
+                            loger.error("There are no flags for function tar")
+                        else:
+                            archive_funcs.tar(os.getcwd(), paths)
+
+                    case 'untar':
+                        if flags:
+                            print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
+                            loger.error("There are no flags for function untar")
+                        else:
+                            archive_funcs.untar(os.getcwd(), paths)
+
                     case _:
                         print(f'\033[01;38;05;196mОшибка:\033[0m неопознанная команда {cin[0][0]}. Чтобы вывести список команд, введите "help".')
                         loger.error(f"Unknoun command: {cin[0][0]}")
@@ -113,7 +152,6 @@ def main() -> None:
 
     print("Завершение работы")
     loger.info("Completion of work")
-
 
 
 if __name__ == "__main__":

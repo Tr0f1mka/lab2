@@ -13,7 +13,7 @@ import re  # noqa: E402
 
 """-------Шаблоны-------"""
 
-COMMANDS = r"(?P<COMMANDS>((ls)|(cd)|(cat)|(cp)|(mv)|(rm))(?=\s+))"
+COMMANDS = r"(?P<COMMANDS>((ls)|(cd)|(cat)|(cp)|(mv)|(rm)|(zip)|(unzip)|(tar)|(untar))(?=\s+))"
 FLAGS_PATT = r"(?P<FLAG>-[a-z]+)"
 PATH_PATT_WITH_DOUBLE_KAWYCHKI = r"(?P<KAWYCHKI>\"[^\"]*\")"
 PATH_PATT_WITH_SINGLE_KAWYCHKI = r"(?P<SKAWYCHKI>'[^\']*\')"
