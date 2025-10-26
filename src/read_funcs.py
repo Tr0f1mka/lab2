@@ -7,9 +7,19 @@
 
 """-----Библиотеки-----"""
 
-import os       # noqa: E402
-import stat     # noqa: E402
-import time     # noqa: E402
+import os                                          # noqa: E402
+import stat                                        # noqa: E402
+import time                                        # noqa: E402
+import logging                                     # noqa: E402
+from src.config import LOGGING_CONFIG              # noqa: E402
+from src.check_input import normalisation_path     # noqa: E402
+
+
+
+"""-------Логер--------"""
+
+logging.config.dictConfig(LOGGING_CONFIG)
+loger = logging.getLogger(__name__)
 
 
 
@@ -34,69 +44,70 @@ def permissions(mode: int) -> str:
     return perms
 
 
-def ls(cur_path: str, cin: list[str]) -> None:
+def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
     """
     Выводит содержимое каталога
     :param cur_path: Строка - рабочая директория
-    :param cin: Список строк - токены команды
+    :param paths: Список строк - пути
+    :param flags: Список строк - флаги
     :return: Данная функция ничего не возвращает
     """
 
     os.chdir(cur_path)                 #Переход в рабочую директорию
 
-    #Форматирование токенов
-    if len(cin) == 0:     #Если токенов нет - флаг пустой, директория текущая
-        flag = ''
-        path = os.getcwd()
-    elif len(cin) == 1:   #Если токен 1 - это либо флаг, либо директория
-        if cin[0][0] == '-':
-            flag = cin[0]
-            path = os.getcwd()
-        else:
-            flag = ''
-            path = cin[0]
-    elif len(cin) == 2:   #Если токенов 2 - это флаг и директория(или нет)
-        if cin[0][0] != '-':
-            print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды ls")
-            return
-        else:
-            flag = cin[0]
-            path = cin[1]
-    else:                 #Если токенов больше 2 - ошибка избытка аргументов
-        print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды ls")
-        return
+    if flags:
+        for i in flags:
+            if i == '-l':
+                flag = i
+            else:
+                print(f'\033[01;38;05;196mОшибка:\033[0m флаг "{i}" вам в руки, а для этой функции существует только флаг "-l".')
+                loger.error(f"Unknown flag {i}")
+                return
+    else:
+        flag = ""
 
-    path = os.path.normpath(path.strip())    #Нормализация пути
-    path = path.replace('\\', "/")+"/"
+    if paths:
+        for j in range(len(paths)):
+            paths[j] = normalisation_path(os.getcwd(), paths[j])
+    else:
+        paths = [os.getcwd()]
+
+    # print(paths)
+    # print(flags)
 
     try:                  #Попытка вывода информации по файлам
         if flag == "-l":                    #Если флаг - выводим подробно
-            for file in os.listdir(path):
-                stats = os.stat(os.path.join(path, file))
-                size = stats.st_size
-                change_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(stats.st_mtime))
-                permission = permissions(stats.st_mode)
-                if permission[0] == 'd':
-                    print(f"{permission}  {size:>12}  {change_time}  \033[01;38;05;63;48;05;46m{file}\033[0m")
-                else:
-                    print(f"{permission}  {size:>12}  {change_time}  \033[01;38;05;46m{file}\033[0m")
+            for path in paths:
+                print(path)
+                for file in os.listdir(path):
+                    stats = os.stat(os.path.join(path, file))
+                    size = stats.st_size
+                    change_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(stats.st_mtime))
+                    permission = permissions(stats.st_mode)
+                    if permission[0] == 'd':
+                        print(f"   {permission}  {size:>12}  {change_time}  \033[01;38;05;63;48;05;46m{file}\033[0m")
+                    else:
+                        print(f"   {permission}  {size:>12}  {change_time}  \033[01;38;05;46m{file}\033[0m")
 
-        elif flag == "":                    #Если нет флага - выводим только названия
-            for file in os.listdir(path):
-                if stat.S_ISDIR(os.stat(os.path.join(path, file)).st_mode):
-                    print(f"\033[01;38;05;63;48;05;46m{file}\033[0m")
-                else:
-                    print(f"\033[01;38;05;46m{file}\033[0m")
+        else:                    #Если нет флага - выводим только названия
+            for path in paths:
+                print(path)
+                for file in os.listdir(path):
+                    if stat.S_ISDIR(os.stat(os.path.join(path, file)).st_mode):
+                        print(f"   \033[01;38;05;63;48;05;46m{file}\033[0m")
+                    else:
+                        print(f"   \033[01;38;05;46m{file}\033[0m")
+        loger.info("Result: Succes")
 
-        else:                               #Если неизвестный флаг - ошибка
-            print(f'\033[01;38;05;196mОшибка:\033[0m флаг "{flag}" вам в руки, а для этой функции существует только флаг "-l".')
-
-    except OSError:                         #Остальные ошибки
-        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.error("File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
+        loger.error("Not enough permissions")
+    except OSError:
+        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.error("Error of OS")
 
 
 def cd(cur_path: str, cin: list[str]) -> str:
@@ -114,32 +125,24 @@ def cd(cur_path: str, cin: list[str]) -> str:
         path = cin[0]
     else:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды cd")
+        loger.error("Too many arguments")
         return os.getcwd()
-    path = path.strip().replace('\\', '/')
-#-------------------------
-#-------------------------
-#azazazazazazazazazazazaza
-#-------------------------
-#-------------------------
-    if '~' in path:
-        # print('azaza', os.path.normpath(os.path.expanduser(path)), [path])
-        home_path = os.path.normpath(os.path.expanduser(path[path.rfind('~'):]))
-        path = home_path
-    else:
-        new_path = os.path.normpath(path)
-        path = new_path
 
-    path = path.strip()
-    path += "/"
-    # print(path)
+    path = normalisation_path(os.getcwd(), path)
+    # print([path])
+
     try:
         os.chdir(path)
-    except OSError:
-        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.error("File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
+        loger.error("Not enough permissions")
+    except OSError:
+        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.error("Error of OS")
     return os.getcwd()
 
 
@@ -153,25 +156,31 @@ def cat(cur_path: str, cin: list[str]) -> None:
 
     os.chdir(cur_path)
 
-    #Форматирование токенов
-    if len(cin) == 1:
-        path = cin[0]
+    if cin:
+        for i in range(len(cin)):
+            cin[i] = normalisation_path(os.getcwd(), cin[i])
     else:
-        print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды cd")
+        print("\033[01;38;05;196mОшибка:\033[0m у функции cat нет цели, но есть путь(должен быть)")
+        loger.error("Argument not found")
         return
-    path = path.strip().replace('\\', '/')
 
     #Попытка чтения файла
     try:
-        with open(path, 'rb') as f:
-            for i in f.readlines():
-                o = str(i)[2:-1]
-                if o[-4:] == "\\r\\n":
-                    o = o[:-4]
-                print(o)
-    except OSError:
-        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        for path in cin:
+            print(path)
+            with open(path, 'rb') as f:
+                for line in f.readlines():
+                    o = str(line)[2:-1]
+                    if o[-4:] == "\\r\\n":
+                        o = o[:-4]
+                    print(f"\033[01;48;05;64m   \033[0m{o}")
+        loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.error("File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
+        loger.error("Not enough permissions")
+    except OSError:
+        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.error("Error of OS")
