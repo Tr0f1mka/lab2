@@ -42,7 +42,7 @@ def cp(cur_path: str, paths: list[str], flags: list[str]) -> None:
                 flag = i
             else:
                 print(f'\033[01;38;05;196mОшибка:\033[0m флаг "{i}" вам в руки, а для этой функции существует только флаг "-r".')
-                loger.error(f"Unknown flag: {i}")
+                loger.error(f"Result: Unknown flag: {i}")
                 return
     else:
         flag = ''
@@ -52,11 +52,11 @@ def cp(cur_path: str, paths: list[str], flags: list[str]) -> None:
         target = paths[1]
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды cp")
-        loger.error("Too many arguments")
+        loger.error("Result: Too many arguments")
         return
     else:
         print("\033[01;38;05;196mОшибка:\033[0m недостаточно аргументов для команды cp")
-        loger.error("Too little arguments")
+        loger.error("Result: Too little arguments")
         return
 
     if flag == "":
@@ -66,13 +66,13 @@ def cp(cur_path: str, paths: list[str], flags: list[str]) -> None:
             loger.info("Result: Succes")
         except FileNotFoundError:
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-            loger.error("File not found")
+            loger.error("Result: File not found")
         except PermissionError:
             print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-            loger.error("Not enough permissions")
+            loger.error("Result: Not enough permissions")
         except OSError:
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-            loger.error("Error of OS")
+            loger.error("Result: Error of OS")
     else:
         try:
             # print(normalisation_path(os.getcwd(), source), normalisation_path(os.getcwd(), target))
@@ -82,13 +82,13 @@ def cp(cur_path: str, paths: list[str], flags: list[str]) -> None:
             loger.info("Result: Succes")
         except FileNotFoundError:
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-            loger.error("File not found")
+            loger.error("Result: File not found")
         except PermissionError:
             print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-            loger.error("Not enough permissions")
+            loger.error("Result: Not enough permissions")
         except OSError:
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-            loger.error("Error of OS")
+            loger.error("Result: Error of OS")
 
 
 def mv(cur_path: str, cin: list[str]) -> None:
@@ -103,14 +103,14 @@ def mv(cur_path: str, cin: list[str]) -> None:
 
     if len(cin) < 2:
         print("\033[01;38;05;196mОшибка:\033[0m недостаточно аргументов для команды mv")
-        loger.error("Too little arguments")
+        loger.error("Result: Too little arguments")
         return
     elif len(cin) == 2:
         source = normalisation_path(os.getcwd(), cin[0])
         target = normalisation_path(os.getcwd(), cin[1])
     else:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды mv")
-        loger.error("Too many arguments")
+        loger.error("Result: Too many arguments")
         return
 
     try:
@@ -118,13 +118,13 @@ def mv(cur_path: str, cin: list[str]) -> None:
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")
 
 
 def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
@@ -143,7 +143,7 @@ def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
                 flag = '-r'
             else:
                 print(f'\033[01;38;05;196mОшибка:\033[0m флаг "{i}" вам в руки, а для этой функции существует только флаг "-r".')
-                loger.error(f"Unknown flag: {i}")
+                loger.error(f"Result: Unknown flag: {i}")
     else:
         flag = ''
 
@@ -152,57 +152,60 @@ def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
             paths[j] = normalisation_path(os.getcwd(), paths[j])
     else:
         print("\033[01;38;05;196mОшибка:\033[0m у функции rm нет цели, но есть путь(должен быть)")
-        loger.error("Too little arguments")
+        loger.error("Result: Too little arguments")
         return
 
     if flag == "":
         for path in paths:
-            if (path[-2] == ':\\') or (path == '/'):
-                print("\033[01;38;05;196mОшибка:\033[0m нельзя удалять корневой каталог")
-                loger.error("Attempt to delete the root directory")
-                continue
-            if os.getcwd() in path:
-                print(f"Вы уверены, что хотите удалить файл {path}? [y/n]")
-                ans = input("\033[01;38;05;222m").strip()
-                print("\033[0m")
-                loger.info(ans)
-                if ans == 'y':
-                    try:
-                        os.remove(path)
-                        loger.info("Result: Succes")
-                    except FileNotFoundError:
-                        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-                        loger.error("File not found")
-                    except PermissionError:
-                        print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-                        loger.error("Not enough permissions")
-                    except OSError:
-                        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-                        loger.error("Error of OS")
-                else:
-                    continue
-            else:
-                print("\033[01;38;05;196mОшибка:\033[0m нельзя удалять родительский каталог")
-                loger.error("Attempt to delete the parent directory")
-
-    else:
-        for path in paths:
-            print(f"Вы уверены, что хотите удалить папку {path}? [y/n]")
+            print(f"Вы уверены, что хотите удалить файл {path}? [y/n]")
             ans = input("\033[01;38;05;222m").strip()
-            print("\033[0m", end='')
+            print("\033[0m")
             loger.info(ans)
             if ans == 'y':
                 try:
-                    shutil.rmtree(path)
+                    os.remove(path)
                     loger.info("Result: Succes")
                 except FileNotFoundError:
                     print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-                    loger.error("File not found")
+                    loger.error("Result: File not found")
                 except PermissionError:
                     print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-                    loger.error("Not enough permissions")
+                    loger.error("Result: Not enough permissions")
                 except OSError:
                     print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-                    loger.error("Error of OS")
+                    loger.error("Result: Error of OS")
             else:
+                loger.info('Result: Cancel delete object')
                 continue
+
+    else:
+        for path in paths:
+            if (path[-2] == ':\\') or (path == '/'):
+                print("\033[01;38;05;196mОшибка:\033[0m нельзя удалять корневой каталог")
+                loger.error("Result: Attempt to delete the root directory")
+                continue
+            if path not in os.getcwd():
+                print(f"Вы уверены, что хотите удалить папку {path}? [y/n]")
+                ans = input("\033[01;38;05;222m").strip()
+                print("\033[0m", end='')
+                loger.info(ans)
+                if ans == 'y':
+                    try:
+                        shutil.rmtree(path)
+                        # print('azaza')
+                        loger.info("Result: Succes")
+                    except FileNotFoundError:
+                        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+                        loger.error("Result: File not found")
+                    except PermissionError:
+                        print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
+                        loger.error("Result: Not enough permissions")
+                    except OSError:
+                        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+                        loger.error("Result: Error of OS")
+                else:
+                    loger.info('Result: Cancel delete object')
+                    continue
+            else:
+                print("\033[01;38;05;196mОшибка:\033[0m нельзя удалять родительский каталог")
+                loger.error("Result: Attempt to delete the parent directory")

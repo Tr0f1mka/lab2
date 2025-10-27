@@ -61,7 +61,7 @@ def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
                 flag = i
             else:
                 print(f'\033[01;38;05;196mОшибка:\033[0m флаг "{i}" вам в руки, а для этой функции существует только флаг "-l".')
-                loger.error(f"Unknown flag {i}")
+                loger.error(f"Result: Unknown flag {i}")
                 return
     else:
         flag = ""
@@ -69,8 +69,10 @@ def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
     if paths:
         for j in range(len(paths)):
             paths[j] = normalisation_path(os.getcwd(), paths[j])
+            # print(paths[j])
     else:
         paths = [os.getcwd()]
+        # print('bibas')
 
     # print(paths)
     # print(flags)
@@ -88,6 +90,7 @@ def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
                         print(f"   {permission}  {size:>12}  {change_time}  \033[01;38;05;63;48;05;46m{file}\033[0m")
                     else:
                         print(f"   {permission}  {size:>12}  {change_time}  \033[01;38;05;46m{file}\033[0m")
+                    # print(stats, type(stats))
 
         else:                    #Если нет флага - выводим только названия
             for path in paths:
@@ -101,13 +104,13 @@ def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
 
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")
 
 
 def cd(cur_path: str, cin: list[str]) -> str:
@@ -125,7 +128,7 @@ def cd(cur_path: str, cin: list[str]) -> str:
         path = cin[0]
     else:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды cd")
-        loger.error("Too many arguments")
+        loger.error("Result: Too many arguments")
         return os.getcwd()
 
     path = normalisation_path(os.getcwd(), path)
@@ -136,13 +139,13 @@ def cd(cur_path: str, cin: list[str]) -> str:
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")
     return os.getcwd()
 
 
@@ -161,7 +164,7 @@ def cat(cur_path: str, cin: list[str]) -> None:
             cin[i] = normalisation_path(os.getcwd(), cin[i])
     else:
         print("\033[01;38;05;196mОшибка:\033[0m у функции cat нет цели, но есть путь(должен быть)")
-        loger.error("Argument not found")
+        loger.error("Result: Argument not found")
         return
 
     #Попытка чтения файла
@@ -177,10 +180,10 @@ def cat(cur_path: str, cin: list[str]) -> None:
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")

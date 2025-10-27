@@ -32,10 +32,22 @@ def input_check(cin_str: str) -> list[list[str]]:
             continue
         elif i.group("FLAG"):
             cin[1].append(i.group(0))
+            # print(type(i.group(0)))
             # cin.append(i)
         else:
             cin[0].append(i.group(0))
             # cin.append(i)
+    cin[1] = list(set(cin[1]))
+
+    for j in range(len(cin[1])):
+        flag = list(set(list(cin[1][j])))
+        str_flag = '-'
+        for o in flag:
+            str_flag += o if o != '-' else ''
+        cin[1][j] = str_flag
+
+    cin[1] = list(set(cin[1]))
+
     return cin
 
 def normalisation_path(cur_path: str, bad_path: str) -> str:
@@ -60,3 +72,6 @@ def normalisation_path(cur_path: str, bad_path: str) -> str:
 
     # print(os.path.abspath(bad_path))
     return os.path.abspath(bad_path)
+
+
+# print(input_check("cd -lllll 'azaza"))

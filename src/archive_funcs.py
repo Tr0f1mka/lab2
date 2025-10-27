@@ -41,11 +41,11 @@ def zip(cur_path: str, paths: list[str]) -> None:
         target = normalisation_path(os.getcwd(), paths[1])
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды zip")
-        loger.error("Too many arguments")
+        loger.error("Result: Too many arguments")
         return
     else:
         print("\033[01;38;05;196mОшибка:\033[0m недостаточно аргументов для команды zip")
-        loger.error("Too little arguments")
+        loger.error("Result: Too little arguments")
         return
 
     try:
@@ -58,13 +58,13 @@ def zip(cur_path: str, paths: list[str]) -> None:
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")
 
 
 def unzip(cur_path: str, paths: list[str]) -> None:
@@ -81,11 +81,11 @@ def unzip(cur_path: str, paths: list[str]) -> None:
         source = normalisation_path(os.getcwd(), paths[0])
     elif len(paths) > 1:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды unzip")
-        loger.error("Too many arguments")
+        loger.error("Result: Too many arguments")
         return
     else:
         print("\033[01;38;05;196mОшибка:\033[0m у функции unzip нет цели, но есть путь(должен быть)")
-        loger.error("Too little arguments")
+        loger.error("Result: Too little arguments")
         return
 
     try:
@@ -94,13 +94,13 @@ def unzip(cur_path: str, paths: list[str]) -> None:
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")
 
 
 def tar(cur_path: str, paths: list[str]) -> None:
@@ -118,11 +118,11 @@ def tar(cur_path: str, paths: list[str]) -> None:
         target = normalisation_path(os.getcwd(), paths[1])
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды tar")
-        loger.error("Too many arguments")
+        loger.error("Result: Too many arguments")
         return
     else:
         print("\033[01;38;05;196mОшибка:\033[0m недостаточно аргументов для команды tar")
-        loger.error("Too little arguments")
+        loger.error("Result: Too little arguments")
         return
 
     try:
@@ -131,13 +131,13 @@ def tar(cur_path: str, paths: list[str]) -> None:
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")
 
 
 def untar(cur_path: str, paths: list[str]) -> None:
@@ -154,11 +154,11 @@ def untar(cur_path: str, paths: list[str]) -> None:
         source = normalisation_path(os.getcwd(), paths[0])
     elif len(paths) > 1:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды untar")
-        loger.error("Too many arguments")
+        loger.error("Result: Too many arguments")
         return
     else:
         print("\033[01;38;05;196mОшибка:\033[0m у функции untar нет цели, но есть путь(должен быть)")
-        loger.error("Too little arguments")
+        loger.error("Result: Too little arguments")
         return
 
     try:
@@ -167,10 +167,10 @@ def untar(cur_path: str, paths: list[str]) -> None:
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("File not found")
+        loger.error("Result: File not found")
     except PermissionError:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
-        loger.error("Not enough permissions")
+        loger.error("Result: Not enough permissions")
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Error of OS")
+        loger.error("Result: Error of OS")

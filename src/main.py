@@ -91,13 +91,13 @@ def main() -> None:
                     case 'cd':
                         if flags:
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
-                            loger.error("There are no flags for function cd")
+                            loger.error("Result: There are no flags for function cd")
                         else:
                             os.chdir(read_funcs.cd(os.getcwd(), paths))
                     case 'cat':
                         if flags:
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
-                            loger.error("There are no flags for function cat")
+                            loger.error("Result: There are no flags for function cat")
                         else:
                             read_funcs.cat(os.getcwd(), paths)
 
@@ -107,7 +107,7 @@ def main() -> None:
                     case 'mv':
                         if flags:
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
-                            loger.error("There are no flags for function mv")
+                            loger.error("Result: There are no flags for function mv")
                         else:
                             format_funcs.mv(os.getcwd(), paths)
 
@@ -117,41 +117,41 @@ def main() -> None:
                     case 'zip':
                         if flags:
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
-                            loger.error("There are no flags for function zip")
+                            loger.error("Result: There are no flags for function zip")
                         else:
                             archive_funcs.zip(os.getcwd(), paths)
 
                     case 'unzip':
                         if flags:
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
-                            loger.error("There are no flags for function unzip")
+                            loger.error("Result: There are no flags for function unzip")
                         else:
                             archive_funcs.unzip(os.getcwd(), paths)
 
                     case 'tar':
                         if flags:
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
-                            loger.error("There are no flags for function tar")
+                            loger.error("Result: There are no flags for function tar")
                         else:
                             archive_funcs.tar(os.getcwd(), paths)
 
                     case 'untar':
                         if flags:
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
-                            loger.error("There are no flags for function untar")
+                            loger.error("Result: There are no flags for function untar")
                         else:
                             archive_funcs.untar(os.getcwd(), paths)
 
                     case _:
                         print(f'\033[01;38;05;196mОшибка:\033[0m неопознанная команда {cin[0][0]}. Чтобы вывести список команд, введите "help".')
-                        loger.error(f"Unknoun command: {cin[0][0]}")
+                        loger.error(f"Result: Unknoun command: {cin[0][0]}")
             else:
                 continue
 
         print()
 
     print("Завершение работы")
-    loger.info("Completion of work")
+    loger.info("Result: Completion of work")
 
 
 if __name__ == "__main__":
