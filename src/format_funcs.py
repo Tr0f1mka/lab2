@@ -180,7 +180,7 @@ def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
 
     else:
         for path in paths:
-            if (path[-2] == ':\\') or (path == '/'):
+            if (path[-2:] == ':\\') or (path == '/'):
                 print("\033[01;38;05;196mОшибка:\033[0m нельзя удалять корневой каталог")
                 loger.error("Result: Attempt to delete the root directory")
                 continue
@@ -191,8 +191,8 @@ def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
                 loger.info(ans)
                 if ans == 'y':
                     try:
-                        shutil.rmtree(path)
-                        # print('azaza')
+                        # shutil.rmtree(path)
+                        print('azaza')
                         loger.info("Result: Succes")
                     except FileNotFoundError:
                         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")

@@ -86,9 +86,13 @@ class TestFormat(unittest.TestCase):
     @patch('os.getcwd')
     @patch('os.remove')
     @patch('os.rmtree')
-    def test_rm(self):
+    @patch('builtins.input')
+    def test_rm(self, mock_input, mock_rmd, mock_rm, mock_get, mock_norm, movk_info, mock_err, mock_chdir):
         #Тест rm
-        print('azaza')
+        mock_input.return_value = 'y'
+        mock_norm.side_effect = ['/folder1/']
+
+        format_funcs.rm('folder1', ['windows.docx', 'lab2.py'], [])
 
 
 unittest.main()
