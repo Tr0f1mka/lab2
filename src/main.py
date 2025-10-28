@@ -20,7 +20,7 @@ import src.archive_funcs as archive_funcs  # noqa: E402
 
 """---------Логер----------"""
 
-logging.config.dictConfig(LOGGING_CONFIG)
+logging.config.dictConfig(LOGGING_CONFIG)             #настройка логера
 loger = logging.getLogger(__name__)
 
 
@@ -68,17 +68,18 @@ def main() -> None:
 
     start()
 
-    working = True
+    working = True                 #запуск рабочего цикла
     while (working):
-        cin_str = input(f"\033[01;38;05;46m{os.getlogin()}\033[0m:\033[01;38;05;63m{os.getcwd()}\033[0m$ \033[01;38;05;222m")
-        print('\033[0m', end = '')
+        cin_str = input(f"\033[01;38;05;46m{os.getlogin()}\033[0m:\033[01;38;05;63m{os.getcwd()}\033[0m$ \033[01;38;05;222m")     #ввод с выводом текущего пользователя и рабочей директории
+        print('\033[0m', end = '')         #очистка цвета ввода консоли
         loger.info(cin_str)
-        cin_str = cin_str.strip()
+
+        cin_str = cin_str.strip()          #попытка выполнить команду
         if cin_str == "exit":
             working = False
         elif cin_str == "help":
             help()
-        else:
+        else:                              #если не справка и не выход - парсим ввод и ищем команду
             cin = check_input.input_check(cin_str)
             if cin[0]:
                 flags = cin[1]
@@ -89,13 +90,13 @@ def main() -> None:
                         read_funcs.ls(os.getcwd(), paths, flags)
 
                     case 'cd':
-                        if flags:
+                        if flags:          #этой функции не нужны флаги
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
                             loger.error("Result: There are no flags for function cd")
                         else:
                             os.chdir(read_funcs.cd(os.getcwd(), paths))
                     case 'cat':
-                        if flags:
+                        if flags:          #этой функции не нужны флаги
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
                             loger.error("Result: There are no flags for function cat")
                         else:
@@ -105,7 +106,7 @@ def main() -> None:
                         format_funcs.cp(os.getcwd(), paths, flags)
 
                     case 'mv':
-                        if flags:
+                        if flags:          #этой функции не нужны флаги
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
                             loger.error("Result: There are no flags for function mv")
                         else:
@@ -115,37 +116,37 @@ def main() -> None:
                         format_funcs.rm(os.getcwd(), paths, flags)
 
                     case 'zip':
-                        if flags:
+                        if flags:          #этой функции не нужны флаги
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
                             loger.error("Result: There are no flags for function zip")
                         else:
                             archive_funcs.zip(os.getcwd(), paths)
 
                     case 'unzip':
-                        if flags:
+                        if flags:          #этой функции не нужны флаги
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
                             loger.error("Result: There are no flags for function unzip")
                         else:
                             archive_funcs.unzip(os.getcwd(), paths)
 
                     case 'tar':
-                        if flags:
+                        if flags:          #этой функции не нужны флаги
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
                             loger.error("Result: There are no flags for function tar")
                         else:
                             archive_funcs.tar(os.getcwd(), paths)
 
                     case 'untar':
-                        if flags:
+                        if flags:          #этой функции не нужны флаги
                             print('\033[01;38;05;196mОшибка:\033[0m для этой функции не существует флагов.')
                             loger.error("Result: There are no flags for function untar")
                         else:
                             archive_funcs.untar(os.getcwd(), paths)
 
-                    case _:
+                    case _:                #неопознанные функции порождают ошибку
                         print(f'\033[01;38;05;196mОшибка:\033[0m неопознанная команда {cin[0][0]}. Чтобы вывести список команд, введите "help".')
                         loger.error(f"Result: Unknoun command: {cin[0][0]}")
-            else:
+            else:                #пустая строка - скип
                 continue
 
         print()

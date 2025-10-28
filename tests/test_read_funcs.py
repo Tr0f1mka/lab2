@@ -74,7 +74,6 @@ class TestReadFuncs(unittest.TestCase):
         mock_listdir.side_effect = FileNotFoundError
 
         read_funcs.ls('folder1', ['dir1'], [])
-        # self.assertIn(mock_cout.getvalue(), '')
         self.assertEqual(mock_cout.getvalue(), '/c:/folder1/dir1\n\x1b[01;38;05;196mОшибка:\x1b[0m указанного пути не существует\n')
 
 
@@ -89,6 +88,7 @@ class TestReadFuncs(unittest.TestCase):
         mock_norm.return_value = '/c:/folder1/dir a/dir b'
 
         read_funcs.cd('folder1', ['dir a/dir b'])
+        self.assertEqual(mock_chdir.call_count, 2)
         self.assertEqual(mock_cout.getvalue(), '')
 
     @patch('os.chdir')

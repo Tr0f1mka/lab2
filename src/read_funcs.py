@@ -31,16 +31,17 @@ def permissions(mode: int) -> str:
     :param mode: Целое число - право доступа
     :return: Строка - право доступа как в Linux
     """
-    perms = 'd' if stat.S_ISDIR(mode) else '-'          # Разрешение на директорию
-    perms += 'r' if mode & stat.S_IRUSR else '-'        # Разрешение на чтение владельцем
-    perms += 'w' if mode & stat.S_IWUSR else '-'        # Разрешение на запись владельцем
-    perms += 'x' if mode & stat.S_IXUSR else '-'        # Разрешение на исполнение владельцем
-    perms += 'r' if mode & stat.S_IRGRP else '-'        # Разрешение на чтение группой
-    perms += 'w' if mode & stat.S_IWGRP else '-'        # Разрешение на запись группой
-    perms += 'x' if mode & stat.S_IXGRP else '-'        # Разрешение на исполнение группой
-    perms += 'r' if mode & stat.S_IROTH else '-'        # Разрешение на чтение другими поьзователями
-    perms += 'w' if mode & stat.S_IWOTH else '-'        # Разрешение на запись другими поьзователями
-    perms += 'x' if mode & stat.S_IXOTH else '-'        # Разрешение на исполнение другими поьзователями
+
+    perms = 'd' if stat.S_ISDIR(mode) else '-'          # разрешение на директорию
+    perms += 'r' if mode & stat.S_IRUSR else '-'        # разрешение на чтение владельцем
+    perms += 'w' if mode & stat.S_IWUSR else '-'        # разрешение на запись владельцем
+    perms += 'x' if mode & stat.S_IXUSR else '-'        # разрешение на исполнение владельцем
+    perms += 'r' if mode & stat.S_IRGRP else '-'        # разрешение на чтение группой
+    perms += 'w' if mode & stat.S_IWGRP else '-'        # разрешение на запись группой
+    perms += 'x' if mode & stat.S_IXGRP else '-'        # разрешение на исполнение группой
+    perms += 'r' if mode & stat.S_IROTH else '-'        # разрешение на чтение другими поьзователями
+    perms += 'w' if mode & stat.S_IWOTH else '-'        # разрешение на запись другими поьзователями
+    perms += 'x' if mode & stat.S_IXOTH else '-'        # разрешение на исполнение другими поьзователями
     return perms
 
 
@@ -53,9 +54,9 @@ def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
     :return: Данная функция ничего не возвращает
     """
 
-    os.chdir(cur_path)                 #Переход в рабочую директорию
+    os.chdir(cur_path)                 #переход в рабочую директорию
 
-    if flags:
+    if flags:                          #проверка флагов
         for i in flags:
             if i == '-l':
                 flag = i
@@ -66,19 +67,14 @@ def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
     else:
         flag = ""
 
-    if paths:
+    if paths:              #проверка путя(-ей)
         for j in range(len(paths)):
             paths[j] = normalisation_path(os.getcwd(), paths[j])
-            # print(paths[j])
     else:
         paths = [os.getcwd()]
-        # print('bibas')
 
-    # print(paths)
-    # print(flags)
-
-    try:                  #Попытка вывода информации по файлам
-        if flag == "-l":                    #Если флаг - выводим подробно
+    try:                  #попытка вывода информации по файлам
+        if flag == "-l":                    #если флаг - выводим подробно
             for path in paths:
                 print(path)
                 for file in os.listdir(path):
@@ -86,23 +82,26 @@ def ls(cur_path: str, paths: list[str], flags: list[str]) -> None:
                     size = stats.st_size
                     change_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(stats.st_mtime))
                     permission = permissions(stats.st_mode)
+                    #директории - синие символы на зелёном фоне
                     if permission[0] == 'd':
                         print(f"   {permission}  {size:>12}  {change_time}  \033[01;38;05;63;48;05;46m{file}\033[0m")
+                    #файлы - зелёные символы без фона
                     else:
                         print(f"   {permission}  {size:>12}  {change_time}  \033[01;38;05;46m{file}\033[0m")
                     # print(stats, type(stats))
 
-        else:                    #Если нет флага - выводим только названия
+        else:                    #если нет флага - выводим только названия
             for path in paths:
                 print(path)
                 for file in os.listdir(path):
+                    #цвета аналогичны выводу с флагом
                     if stat.S_ISDIR(os.stat(os.path.join(path, file)).st_mode):
                         print(f"   \033[01;38;05;63;48;05;46m{file}\033[0m")
                     else:
                         print(f"   \033[01;38;05;46m{file}\033[0m")
         loger.info("Result: Succes")
 
-    except FileNotFoundError:
+    except FileNotFoundError:           #ошибки
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
         loger.error("Result: File not found")
     except PermissionError:
@@ -123,19 +122,21 @@ def cd(cur_path: str, cin: list[str]) -> str:
 
     os.chdir(cur_path)
 
-    #Форматирование токенов
-    if len(cin) == 1:
+    if len(cin) == 1:         #проверка пути
         path = cin[0]
-    else:
+    elif len(cin) > 1:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды cd")
         loger.error("Result: Too many arguments")
         return os.getcwd()
+    else:
+        print("\033[01;38;05;196mОшибка:\033[0m у функции cat нет цели, но есть путь(должен быть)")
+        loger.error("Result: Argument not found")
+        return os.getcwd()
 
     path = normalisation_path(os.getcwd(), path)
-    # print([path])
 
     try:
-        os.chdir(path)
+        os.chdir(path)         #попытка переместиться в прекрасную новую директорию
         loger.info("Result: Succes")
     except FileNotFoundError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
@@ -146,7 +147,7 @@ def cd(cur_path: str, cin: list[str]) -> str:
     except OSError:
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
         loger.error("Result: Error of OS")
-    return os.getcwd()
+    return os.getcwd()        #возврат адреса новой или старой директории
 
 
 def cat(cur_path: str, cin: list[str]) -> None:
@@ -159,7 +160,7 @@ def cat(cur_path: str, cin: list[str]) -> None:
 
     os.chdir(cur_path)
 
-    if cin:
+    if cin:           #проверка путей
         for i in range(len(cin)):
             cin[i] = normalisation_path(os.getcwd(), cin[i])
     else:
@@ -167,7 +168,7 @@ def cat(cur_path: str, cin: list[str]) -> None:
         loger.error("Result: Argument not found")
         return
 
-    #Попытка чтения файла
+    #попытка чтения файла
     try:
         for path in cin:
             print(path)
@@ -178,7 +179,7 @@ def cat(cur_path: str, cin: list[str]) -> None:
                         o = o[:-4]
                     print(f"\033[01;48;05;64m   \033[0m{o}")
         loger.info("Result: Succes")
-    except FileNotFoundError:
+    except FileNotFoundError:       #ошибки
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
         loger.error("Result: File not found")
     except PermissionError:

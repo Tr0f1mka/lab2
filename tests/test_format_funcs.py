@@ -84,15 +84,62 @@ class TestFormat(unittest.TestCase):
     @patch('src.format_funcs.loger.info')
     @patch('src.format_funcs.normalisation_path')
     @patch('os.getcwd')
+    @patch('os.path.exists')
     @patch('os.remove')
-    @patch('os.rmtree')
+    @patch('shutil.rmtree')
     @patch('builtins.input')
-    def test_rm(self, mock_input, mock_rmd, mock_rm, mock_get, mock_norm, movk_info, mock_err, mock_chdir):
+    @patch('sys.stdout')
+    def test_rm(self, mock_cout, mock_cin, mock_rmd, mock_rm, mock_exists, mock_get, mock_norm, mock_info, mock_err, mock_chdir):
         #Тест rm
-        mock_input.return_value = 'y'
-        mock_norm.side_effect = ['/folder1/']
+        mock_cin.side_effect = ['y', 'n']
+        mock_norm.side_effect = ['/folder1/windows.docx', '/folder1/lab2.py']
+        mock_exists.return_value = True
 
         format_funcs.rm('folder1', ['windows.docx', 'lab2.py'], [])
+        self.assertEqual(mock_rm.call_count, 1)
+        self.assertEqual(mock_rmd.call_count, 0)
+        self.assertEqual(mock_info.call_count, 4)
 
+    @patch('os.chdir')
+    @patch('src.format_funcs.loger.error')
+    @patch('src.format_funcs.loger.info')
+    @patch('src.format_funcs.normalisation_path')
+    @patch('os.getcwd')
+    @patch('os.path.exists')
+    @patch('os.remove')
+    @patch('shutil.rmtree')
+    @patch('builtins.input')
+    @patch('sys.stdout')
+    def test_rm_dir(self, mock_cout, mock_cin, mock_rmd, mock_rm, mock_exists, mock_get, mock_norm, mock_info, mock_err, mock_chdir):
+        #Тест rm для директории с нехваткой прав
+        mock_cin.side_effect = ['y', 'y']
+        mock_norm.side_effect = ['/folder1/windows', '/folder1/system 32']
+        mock_exists.return_value = True
+        mock_rmd.side_effect = [None, PermissionError]
+
+        format_funcs.rm('folder1', ['vuz', 'system 32'], ['-r'])
+        self.assertEqual(mock_rm.call_count, 0)
+        self.assertEqual(mock_rmd.call_count, 2)
+        self.assertEqual(mock_info.call_count, 3)
+        mock_err.assert_called_once_with('Result: Not enough permissions')
+
+    @patch('os.chdir')
+    @patch('src.format_funcs.loger.error')
+    @patch('src.format_funcs.loger.info')
+    @patch('src.format_funcs.normalisation_path')
+    @patch('os.getcwd')
+    @patch('os.path.exists')
+    @patch('os.remove')
+    @patch('shutil.rmtree')
+    @patch('builtins.input')
+    @patch('sys.stdout', new_callable=io.StringIO)
+    def test_rm_err(self, mock_cout, mock_cin, mock_rmd, mock_rm, mock_exists, mock_get, mock_norm, mock_info, mock_err, mock_chdir):
+        #Тест rm с ошибкой нехватки аргументов
+
+        format_funcs.rm('folder1', [], ['-r'])
+        self.assertEqual(mock_rm.call_count, 0)
+        self.assertEqual(mock_rmd.call_count, 0)
+        mock_err.assert_called_once_with('Result: Too little arguments')
+        self.assertEqual(mock_cout.getvalue(), '\x1b[01;38;05;196mОшибка:\x1b[0m у функции rm нет цели, но есть путь(должен быть)\n')
 
 unittest.main()
