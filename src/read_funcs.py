@@ -172,12 +172,9 @@ def cat(cur_path: str, cin: list[str]) -> None:
     try:
         for path in cin:
             print(path)
-            with open(path, 'rb') as f:
+            with open(path, 'r', encoding='utf-8') as f:
                 for line in f.readlines():
-                    o = str(line)[2:-1]
-                    if o[-4:] == "\\r\\n":
-                        o = o[:-4]
-                    print(f"\033[01;48;05;64m   \033[0m{o}")
+                    print(f"\033[01;48;05;64m   \033[0m{line}")
         loger.info("Result: Succes")
     except FileNotFoundError:       #ошибки
         print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")

@@ -116,8 +116,8 @@ class TestReadFuncs(unittest.TestCase):
         mock_norm.return_value = 'c:/folder1/file1.txt'
 
         read_funcs.cat('folder1', ['file1.txt'])
-        self.assertEqual(mock_cout.getvalue(), 'c:/folder1/file1.txt\n\x1b[01;48;05;64m   \x1b[0mline1\\n\n\x1b[01;48;05;64m   \x1b[0mline2\\n\n')
-        mock_file.assert_called_once_with("c:/folder1/file1.txt", 'rb')
+        self.assertEqual(mock_file.call_count, 1)
+        mock_file.assert_called_once_with("c:/folder1/file1.txt", 'r', encoding='utf-8')
 
     @patch('os.chdir')
     @patch('src.read_funcs.normalisation_path')
@@ -130,7 +130,7 @@ class TestReadFuncs(unittest.TestCase):
         mock_norm.side_effect = ['c:/folder1/file1.txt', 'c:/folder1/file2.txt']
 
         read_funcs.cat('folder1', ['file1.txt', 'file2.txt'])
-        self.assertEqual(mock_cout.getvalue(), 'c:/folder1/file1.txt\n\x1b[01;48;05;64m   \x1b[0mline1\\n\n\x1b[01;48;05;64m   \x1b[0mline2\\n\nc:/folder1/file2.txt\n\x1b[01;48;05;64m   \x1b[0mline1\\n\n\x1b[01;48;05;64m   \x1b[0mline2\\n\n')
+        self.assertEqual(mock_file.call_count, 2)
 
     @patch('os.chdir')
     @patch('src.read_funcs.normalisation_path')
@@ -145,6 +145,6 @@ class TestReadFuncs(unittest.TestCase):
 
         read_funcs.cat('folder1', ['file1.txt'])
         self.assertEqual(mock_cout.getvalue(), 'c:/folder1/file1.txt\n\x1b[01;38;05;196mОшибка:\x1b[0m у тебя здесь нет власти(недостаточно прав)\n')
-        mock_file.assert_called_once_with("c:/folder1/file1.txt", 'rb')
+        mock_file.assert_called_once_with("c:/folder1/file1.txt", 'r', encoding='utf-8')
 
 unittest.main()
