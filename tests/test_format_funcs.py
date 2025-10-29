@@ -28,7 +28,7 @@ class TestFormat(unittest.TestCase):
     @patch('src.format_funcs.normalisation_path')
     def test_cp_dir(self, mock_norm, mock_cpd, mock_cp, mock_info, mock_error, mock_chdir):
         #Тест cp для директории
-        mock_norm.side_effect = ['/c:/folder1/files', '/c:/folder1/src/files']
+        mock_norm.side_effect = ['/c:/folder1/files', '/c:/folder1/src']
 
         format_funcs.cp('folder1', ['files', 'src'], ['-r'])
         mock_cpd.assert_called_once_with('/c:/folder1/files', '/c:/folder1/src/files')

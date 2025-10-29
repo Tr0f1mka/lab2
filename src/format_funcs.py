@@ -48,8 +48,8 @@ def cp(cur_path: str, paths: list[str], flags: list[str]) -> None:
         flag = ''
 
     if len(paths) == 2:    #проверка путей
-        source = paths[0]
-        target = paths[1]
+        source = normalisation_path(os.getcwd(), paths[0])
+        target = normalisation_path(os.getcwd(), paths[1])
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды cp")
         loger.error("Result: Too many arguments")
@@ -61,8 +61,18 @@ def cp(cur_path: str, paths: list[str], flags: list[str]) -> None:
 
     if flag == "":
         try:       #попытка копирования файла
-            shutil.copy2(normalisation_path(os.getcwd(), source), normalisation_path(os.getcwd(), target))
-            loger.info("Result: Succes")
+            if os.path.isdir(source):
+                if not(os.listdir(source)):
+                    if source.split(os.sep)[-1] != target.split(os.sep)[-1]:
+                        target = os.path.join(target, source.split(os.sep)[-1])
+                    shutil.copytree(source, target)
+                    loger.info("Result: Succes")
+                else:
+                    print('\033[01;38;05;196mОшибка:\033[0m для копирования директории с содержимым нужен флаг "-r"')
+                    loger.error("Result: Less -r")
+            else:
+                shutil.copy2(source, target)
+                loger.info("Result: Succes")
         except FileNotFoundError:
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
             loger.error("Result: File not found")
@@ -74,9 +84,9 @@ def cp(cur_path: str, paths: list[str], flags: list[str]) -> None:
             loger.error("Result: Error of OS")
     else:
         try:     #попытка копирования директории
-            if source.split(os.sep)[-1] != target.split(os.sep)[-1]:
-                target = os.path.join(target, source.split(os.sep)[-1])
-            shutil.copytree(normalisation_path(os.getcwd(), source), normalisation_path(os.getcwd(), target))
+            if source.split('/')[-1] != target.split('/')[-1]:
+                target = f"{target}/{source.split('/')[-1]}"
+            shutil.copytree(source, target)
             loger.info("Result: Succes")
         except FileNotFoundError:
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
@@ -134,7 +144,6 @@ def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
     """
 
     os.chdir(cur_path)
-
     if flags:              #проверка флагов
         for i in flags:
             if i == '-r':
@@ -163,8 +172,16 @@ def rm(cur_path: str, paths: list[str], flags: list[str]) -> None:
                 loger.info(ans)
                 if ans == 'y':
                     try:               #сам процесс удаления
-                        os.remove(path)
-                        loger.info("Result: Succes")
+                        if os.path.isdir(path):
+                            if not(os.listdir(path)):
+                                shutil.rmtree(path)
+                                loger.info("Result: Succes")
+                            else:
+                                print('\033[01;38;05;196mОшибка:\033[0m для удаления директории с содержимым нужен флаг "-r"')
+                            loger.error("Result: Less -r")
+                        else:
+                            os.remove(path)
+                            loger.info("Result: Succes")
                     except PermissionError:
                         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
                         loger.error("Result: Not enough permissions")

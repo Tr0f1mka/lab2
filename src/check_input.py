@@ -73,4 +73,4 @@ def normalisation_path(cur_path: str, bad_path: str) -> str:
     bad_path= bad_path.strip()             #удаляем пробелы по краям
     bad_path += "/" if bad_path[-1] == ':' else ''     #если пользователь на винде, но ввёл название корня без разделителя, добавляем /
 
-    return os.path.abspath(bad_path)
+    return os.path.abspath(bad_path).replace('\\', '/')
