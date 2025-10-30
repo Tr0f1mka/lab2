@@ -39,12 +39,15 @@ def zip(cur_path: str, paths: list[str]) -> None:
     if len(paths) == 2:                     #проверка, что дано только 2 пути: источник и назначение
         source = normalisation_path(os.getcwd(), paths[0])
         target = normalisation_path(os.getcwd(), paths[1])
+    elif len(paths) == 1:
+        source = normalisation_path(os.getcwd(), paths[0])
+        target = normalisation_path(os.getcwd(), paths[0]) + ".zip"
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды zip")
         loger.error("Result: Too many arguments")
         return
     else:
-        print("\033[01;38;05;196mОшибка:\033[0m недостаточно аргументов для команды zip")
+        print("\033[01;38;05;196mОшибка:\033[0m у функции zip нет цели, но есть путь(должен быть)")
         loger.error("Result: Too little arguments")
         return
 
@@ -58,7 +61,7 @@ def zip(cur_path: str, paths: list[str]) -> None:
                             arcname = os.path.relpath(file_path, start=source)
                             zipf.write(file_path, arcname)
                 loger.info("Result: Succes")
-            else:                              #ошибка, если не директория
+            else:                           #ошибка, если не директория
                 print("\033[01;38;05;196mОшибка:\033[0m нельзя архивировать файлы")
                 loger.error("Result: Try create archive from file")
         else:                               #ошибка, если нет этого
@@ -121,12 +124,15 @@ def tar(cur_path: str, paths: list[str]) -> None:
     if len(paths) == 2:                     #проверка, что дано только 2 пути: источник и назначение
         source = normalisation_path(os.getcwd(), paths[0])
         target = normalisation_path(os.getcwd(), paths[1])
+    elif len(paths) == 1:
+        source = normalisation_path(os.getcwd(), paths[0])
+        target = normalisation_path(os.getcwd(), paths[0]) + ".tar.gz"
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды tar")
         loger.error("Result: Too many arguments")
         return
     else:
-        print("\033[01;38;05;196mОшибка:\033[0m недостаточно аргументов для команды tar")
+        print("\033[01;38;05;196mОшибка:\033[0m у функции tar нет цели, но есть путь(должен быть)")
         loger.error("Result: Too little arguments")
         return
 
