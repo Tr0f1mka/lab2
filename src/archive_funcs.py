@@ -9,6 +9,7 @@
 """-------Библиотека-------"""
 
 import os                                          # noqa: E402
+import shutil                                      # noqa: E402
 import zipfile                                     # noqa: E402
 import tarfile                                     # noqa: E402
 import logging                                     # noqa: E402
@@ -41,7 +42,7 @@ def zip(cur_path: str, paths: list[str]) -> None:
         target = normalisation_path(os.getcwd(), paths[1])
     elif len(paths) == 1:
         source = normalisation_path(os.getcwd(), paths[0])
-        target = normalisation_path(os.getcwd(), paths[0]) + ".zip"
+        target = normalisation_path(os.getcwd(), paths[0])
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды zip")
         loger.error("Result: Too many arguments")
@@ -54,7 +55,7 @@ def zip(cur_path: str, paths: list[str]) -> None:
     try:                                   #попытка архивнуть директорию
         if os.path.exists(source):
             if os.path.isdir(source):
-                with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                with zipfile.ZipFile(target+'.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
                     for root, dirs, files in os.walk(source):
                         for file in files:
                             file_path = os.path.join(root, file)
@@ -62,17 +63,26 @@ def zip(cur_path: str, paths: list[str]) -> None:
                             zipf.write(file_path, arcname)
                 loger.info("Result: Succes")
             else:                           #ошибка, если не директория
-                print("\033[01;38;05;196mОшибка:\033[0m нельзя архивировать файлы")
-                loger.error("Result: Try create archive from file")
+                path_dir_arch = target[:target.rfind('.')]
+                os.mkdir(path_dir_arch)
+                shutil.copy2(source, path_dir_arch)
+                with zipfile.ZipFile(path_dir_arch+'.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
+                    for root, dirs, files in os.walk(path_dir_arch):
+                        for file in files:
+                            file_path = os.path.join(root, file)
+                            arcname = os.path.relpath(file_path, start=source)
+                            zipf.write(file_path, arcname)
+                shutil.rmtree(path_dir_arch)
+                loger.info("Result: Succes")
         else:                               #ошибка, если нет этого
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
             loger.error("Result: File not found")
     except PermissionError:                #ошибка, если нет прав
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
         loger.error("Result: Not enough permissions")
-    except OSError:                        #прочие ошибки ОС
-        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
-        loger.error("Result: Error of OS")
+    # except OSError:                        #прочие ошибки ОС
+    #     print("\033[01;38;05;196mОшибка:\033[0m указанно1го пути не существует")
+    #     loger.error("Result: Error of OS")
 
 
 def unzip(cur_path: str, paths: list[str]) -> None:
@@ -138,13 +148,13 @@ def tar(cur_path: str, paths: list[str]) -> None:
 
     try:                                    #попытка архивнуть директорию
         if os.path.exists(source):
-            if os.path.isdir(source):
+            # if os.path.isdir(source):
                 with tarfile.open(target, 'w:gz') as tarf:
                     tarf.add(source, arcname=os.path.basename(source))
                 loger.info("Result: Succes")
-            else:                               #ошибка, если не директория
-                print("\033[01;38;05;196mОшибка:\033[0m нельзя архивировать файлы")
-                loger.error("Result: Try create archive from file")
+            # else:                               #ошибка, если не директория
+            #     print("\033[01;38;05;196mОшибка:\033[0m нельзя архивировать файлы")
+            #     loger.error("Result: Try create archive from file")
         else:                               #ошибка, если нет этого
             print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
             loger.error("Result: File not found")
@@ -152,7 +162,7 @@ def tar(cur_path: str, paths: list[str]) -> None:
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
         loger.error("Result: Not enough permissions")
     except OSError:                         #прочие ошибки ОС
-        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        print("\033[01;38;05;196mОшибка:\033[0m указа1нного пути не существует")
         loger.error("Result: Error of OS")
 
 

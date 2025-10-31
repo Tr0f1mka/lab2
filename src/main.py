@@ -16,8 +16,6 @@ import src.read_funcs as read_funcs        # noqa: E402
 import src.format_funcs as format_funcs    # noqa: E402
 import src.archive_funcs as archive_funcs  # noqa: E402
 
-
-
 """---------Логер----------"""
 
 logging.config.dictConfig(LOGGING_CONFIG)             #настройка логера
