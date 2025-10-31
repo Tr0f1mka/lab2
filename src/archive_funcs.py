@@ -43,6 +43,8 @@ def zip(cur_path: str, paths: list[str]) -> None:
     elif len(paths) == 1:
         source = normalisation_path(os.getcwd(), paths[0])
         target = normalisation_path(os.getcwd(), paths[0])
+        if (target[-4:] != '.zip'):
+            target = target[:-4]
     elif len(paths) > 2:
         print("\033[01;38;05;196mОшибка:\033[0m слишком много аргументов для команды zip")
         loger.error("Result: Too many arguments")
@@ -55,7 +57,7 @@ def zip(cur_path: str, paths: list[str]) -> None:
     try:                                   #попытка архивнуть директорию
         if os.path.exists(source):
             if os.path.isdir(source):
-                with zipfile.ZipFile(target+'.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
+                with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as zipf:
                     for root, dirs, files in os.walk(source):
                         for file in files:
                             file_path = os.path.join(root, file)
