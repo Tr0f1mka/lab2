@@ -82,9 +82,9 @@ def zip(cur_path: str, paths: list[str]) -> None:
     except PermissionError:                #ошибка, если нет прав
         print("\033[01;38;05;196mОшибка:\033[0m у тебя здесь нет власти(недостаточно прав)")
         loger.error("Result: Not enough permissions")
-    # except OSError:                        #прочие ошибки ОС
-    #     print("\033[01;38;05;196mОшибка:\033[0m указанно1го пути не существует")
-    #     loger.error("Result: Error of OS")
+    except OSError:                        #прочие ошибки ОС
+        print("\033[01;38;05;196mОшибка:\033[0m указанного пути не существует")
+        loger.error("Result: Error of OS")
 
 
 def unzip(cur_path: str, paths: list[str]) -> None:
