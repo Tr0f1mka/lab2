@@ -7,7 +7,7 @@ import src.archive_funcs as archive_funcs
 class TestArchive(unittest.TestCase):
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('os.walk')
@@ -27,7 +27,7 @@ class TestArchive(unittest.TestCase):
         mock_info.assert_called_once_with('Result: Succes')
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('os.walk')
@@ -46,7 +46,7 @@ class TestArchive(unittest.TestCase):
 
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('os.walk')
@@ -62,7 +62,7 @@ class TestArchive(unittest.TestCase):
         mock_info.assert_called_once_with('Result: Succes')
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('os.walk')
@@ -79,7 +79,7 @@ class TestArchive(unittest.TestCase):
 
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('tarfile.open')
@@ -99,7 +99,7 @@ class TestArchive(unittest.TestCase):
 
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('tarfile.open')
@@ -117,7 +117,7 @@ class TestArchive(unittest.TestCase):
 
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('tarfile.open')
@@ -132,7 +132,7 @@ class TestArchive(unittest.TestCase):
         mock_info.assert_called_once_with('Result: Succes')
 
     @patch('os.chdir')
-    @patch('src.archive_funcs.normalisation_path')
+    @patch('src.archive_funcs.normalization_path')
     @patch('src.archive_funcs.loger.info')
     @patch('src.archive_funcs.loger.error')
     @patch('tarfile.open')

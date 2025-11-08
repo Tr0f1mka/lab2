@@ -10,7 +10,7 @@ class TestReadFuncs(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('os.getcwd')
     @patch('os.listdir')
     @patch('os.stat')
@@ -29,7 +29,7 @@ class TestReadFuncs(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('os.getcwd')
     @patch('os.listdir')
     @patch('os.stat')
@@ -61,7 +61,7 @@ class TestReadFuncs(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('os.getcwd')
     @patch('os.listdir')
     @patch('os.stat')
@@ -79,7 +79,7 @@ class TestReadFuncs(unittest.TestCase):
 
     @patch('os.chdir')
     @patch('os.getcwd')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
     @patch('sys.stdout', new_callable=io.StringIO)
@@ -93,7 +93,7 @@ class TestReadFuncs(unittest.TestCase):
 
     @patch('os.chdir')
     @patch('os.getcwd')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
     @patch('sys.stdout', new_callable=io.StringIO)
@@ -106,7 +106,7 @@ class TestReadFuncs(unittest.TestCase):
 
 
     @patch('os.chdir')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
     @patch("builtins.open", new_callable=mock_open, read_data=b"line1\nline2\n")
@@ -120,7 +120,7 @@ class TestReadFuncs(unittest.TestCase):
         mock_file.assert_called_once_with("c:/folder1/file1.txt", 'r', encoding='utf-8')
 
     @patch('os.chdir')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
     @patch("builtins.open", new_callable=mock_open, read_data=b"line1\nline2\n")
@@ -133,7 +133,7 @@ class TestReadFuncs(unittest.TestCase):
         self.assertEqual(mock_file.call_count, 2)
 
     @patch('os.chdir')
-    @patch('src.read_funcs.normalisation_path')
+    @patch('src.read_funcs.normalization_path')
     @patch('src.read_funcs.loger.error')
     @patch('src.read_funcs.loger.info')
     @patch("builtins.open", new_callable=mock_open, read_data=b"line1\nline2\n")

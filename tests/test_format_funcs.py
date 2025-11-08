@@ -10,7 +10,7 @@ class TestFormat(unittest.TestCase):
     @patch('src.format_funcs.loger.info')
     @patch('shutil.copy2')
     @patch('shutil.copytree')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     def test_cp(self, mock_norm, mock_cpd, mock_cp, mock_info, mock_error, mock_chdir):
         #Тест cp
         mock_norm.side_effect = ['/c:/folder1/file1.txt', '/c:/folder1/src']
@@ -25,7 +25,7 @@ class TestFormat(unittest.TestCase):
     @patch('src.format_funcs.loger.info')
     @patch('shutil.copy2')
     @patch('shutil.copytree')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     def test_cp_dir(self, mock_norm, mock_cpd, mock_cp, mock_info, mock_error, mock_chdir):
         #Тест cp для директории
         mock_norm.side_effect = ['/c:/folder1/files', '/c:/folder1/src']
@@ -40,7 +40,7 @@ class TestFormat(unittest.TestCase):
     @patch('src.format_funcs.loger.info')
     @patch('shutil.copy2')
     @patch('shutil.copytree')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     @patch('sys.stdout', new_callable=io.StringIO)
     def test_cp_err(self, mock_cout, mock_norm, mock_cpd, mock_cp, mock_info, mock_error, mock_chdir):
         #Тест cp с ошибкой ОС
@@ -52,7 +52,7 @@ class TestFormat(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.format_funcs.loger.error')
     @patch('src.format_funcs.loger.info')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     @patch('shutil.move')
     # @patch('sys.stdout', new_callable=io.StringIO)
     def test_mv(self, mock_mv, mock_norm, mock_info, mock_err, mock_chdir):
@@ -66,7 +66,7 @@ class TestFormat(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.format_funcs.loger.error')
     @patch('src.format_funcs.loger.info')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     @patch('shutil.move')
     @patch('sys.stdout', new_callable=io.StringIO)
     def test_mv_err(self, mock_cout, mock_mv, mock_norm, mock_info, mock_err, mock_chdir):
@@ -82,7 +82,7 @@ class TestFormat(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.format_funcs.loger.error')
     @patch('src.format_funcs.loger.info')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     @patch('os.getcwd')
     @patch('os.path.exists')
     @patch('os.remove')
@@ -103,7 +103,7 @@ class TestFormat(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.format_funcs.loger.error')
     @patch('src.format_funcs.loger.info')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     @patch('os.getcwd')
     @patch('os.path.exists')
     @patch('os.remove')
@@ -126,7 +126,7 @@ class TestFormat(unittest.TestCase):
     @patch('os.chdir')
     @patch('src.format_funcs.loger.error')
     @patch('src.format_funcs.loger.info')
-    @patch('src.format_funcs.normalisation_path')
+    @patch('src.format_funcs.normalization_path')
     @patch('os.getcwd')
     @patch('os.path.exists')
     @patch('os.remove')
