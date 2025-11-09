@@ -1,8 +1,8 @@
 """-----Библиотеки-----"""
 
-import os                                          
-import stat                                        
-import time             
+import os
+import stat
+import time
 from src.tools import check_flags, check_paths, create_log
 from src.patterns import Color
 
@@ -70,6 +70,7 @@ def ls(cur_path: str, paths: list[str], flags: str) -> None:
                 size = stats.st_size
                 change_time = time.strftime('%Y-%m-%d %H:%M', time.localtime(stats.st_mtime))
                 permission = permissions(stats.st_mode)
+
                 #директории - синие символы на зелёном фоне
                 if permission[0] == 'd':
                     print(f"   {permission}  {size:>12}  {change_time}  \033[01;38;05;63;48;05;46m{file}{Color.RESET}")
@@ -80,23 +81,22 @@ def ls(cur_path: str, paths: list[str], flags: str) -> None:
 
 
 @create_log
-def cd(cur_path: str, paths: list[str], flags: str) -> None:
+def cd(cur_path: str, paths: list[str], flags: str) -> str:
     """
     Переход в другую директорию
     :param cur_path: Строка - рабочая директория
     :param paths: Список строк - пути
     :param flags: Строка - флаги
-    :return: Данная функция ничего не возвращает
+    :return: Строка - текущая рабочая директория
     """
 
     os.chdir(cur_path)
 
     check_flags(flags, "")
     paths = check_paths(paths, 1)
-
     os.chdir(paths[0])
 
-    return paths[0]
+    return os.getcwd()
 
 
 @create_log
@@ -118,4 +118,4 @@ def cat(cur_path: str, paths: list[str], flags: str) -> None:
         print(path)
         with open(path, 'r', encoding='utf-8') as f:
             for line in f.readlines():
-                print(f"{Color.PAGE}   {Color.RESET}{line}", end="")
+                print(f"{Color.PAGE}    {Color.RESET}{line}", end="")

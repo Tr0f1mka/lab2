@@ -3,7 +3,8 @@
 import os
 import shutil
 from src.tools import Color, check_flags, check_paths, create_log, user_input, logger
-from src.my_exception import LessRMFlagError
+from src.my_exceptions import LessRFlagError
+from pygame import mixer       #type: ignore
 
 
 
@@ -12,6 +13,13 @@ from src.my_exception import LessRMFlagError
 ---Функции cp, mv, rm---
 ------------------------
 """
+
+
+
+"""--Загрузка музыки---"""
+
+mixer.init()
+music1 = mixer.Sound(os.path.abspath("src/music/song.ogg"))
 
 
 
@@ -43,7 +51,7 @@ def cp(cur_path: str, paths: list[str], flags: str) -> None:
             if not(os.listdir(source)):
                 shutil.copytree(source, target)
             else:
-                print(f'{Color.ERROR}Ошибка:{Color.RESET} для копирования директории с содержимым нужен флаг "-r"')
+                raise LessRFlagError
         else:
             shutil.copy2(source, target)
     else:
@@ -94,19 +102,19 @@ def rm(cur_path: str, paths: list[str], flags: str) -> None:
                     if not(os.listdir(path)):
                         shutil.rmtree(path)
                     else:
-                        print(f"{Color.ERROR}Ошибка:{Color.RESET} для удаления директории с содержимым нужен флаг \"-r\"")
-                        raise LessRMFlagError
+                        raise LessRFlagError
                 else:
                     os.remove(path)
             else:
                 logger.info("[RESULT] <rm> Cancel delete")
-    
+
     else:
         for path in paths:
             if (path[-2:] == ':\\') or (path == '/'):         #защита от удаления корня
                 print(f"{Color.ERROR}Ошибка:{Color.RESET} нельзя удалять корневой каталог")
+                logger.error("[RESULT] <rm> cancel remove root directory")
                 continue
-            if path not in os.getcwd():              #если путь не является началом текущей рабочей директории, пытаемся удалить
+            if not (os.getcwd()).startswith(os.path.abspath(path)):              #если путь не является началом текущей рабочей директории, пытаемся удалить
                 print(f"Вы уверены, что хотите удалить папку {path}? [y/n]")     #запрос подтверждения удаления
                 ans = user_input()
                 if ans == 'y':
@@ -114,5 +122,7 @@ def rm(cur_path: str, paths: list[str], flags: str) -> None:
                 else:
                     logger.info("[RESULT] <rm> Cancel delete")
             else:
+                mixer.stop()
+                music1.play()
                 print(f"{Color.ERROR}Ошибка:{Color.RESET} нельзя отворачиваться от семьи(нельзя удалять родительский каталог)")
                 logger.error("[RESULT] <rm> Attempt to delete the parent directory")

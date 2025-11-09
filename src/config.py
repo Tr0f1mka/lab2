@@ -19,6 +19,7 @@ LOGGING_CONFIG = {
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "standard",
+            "encoding": "utf-8",
             "mode": "a",
             "filename": "debug.log",
             "maxBytes": 5 * 1024 * 1024,  # 5 MB before rotating

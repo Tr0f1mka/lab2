@@ -34,6 +34,10 @@ PATTERN = rf"""(
 TOKEN_RE = re.compile(PATTERN, re.VERBOSE)
 
 class Color():
+    """
+    Класс цветов консольного вывода
+    """
+
     ERROR = "\033[01;38;05;196m"
     INPUT = "\033[01;38;05;222m"
     FILE = "\033[01;38;05;46m"

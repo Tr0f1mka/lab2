@@ -1,7 +1,7 @@
 """-------Библиотеки-------"""
 
 import os
-from src.tools import user_input, parser
+from src.tools import user_input, parser, logger
 import src.read_funcs as read_funcs
 import src.format_funcs as format_funcs
 import src.archive_funcs as archive_funcs
@@ -44,6 +44,7 @@ def start() -> None:
     print("Корпорация TR0F1MKASOFT (TR0F1MKASOFT Corporation). Все права защищены")
     print()
 
+
 def help():
     """
     Функция для вывода справки по функциям
@@ -63,8 +64,6 @@ def help():
     print(f'{Color.INPUT}tar <path> <archive.zip>{Color.RESET} - создаёт tar.gz-архив из директории с указанным именем')
     print(f'{Color.INPUT}untar <path>{Color.RESET} - разархивирует указанный tar.gz-архив в рабочую директорию')
 
-    # loger.info("Result: Succes")
-
 
 def main() -> None:
     """
@@ -83,23 +82,24 @@ def main() -> None:
         else:                              #если не справка - парсим ввод и ищем команду
             # print(2)
             paths, flag = parser(cin_str)
+            # print(paths, flag)
             try:
                 command = paths.pop(0)
                 # result = funcs[command](cur_path=os.getcwd(), paths=paths, flags=flag)
                 if command == 'zip' or command == 'tar':
-                    archive_funcs.make_archive(os.getcwd(), paths, command if command == 'zip' else 'gztar', flag)
+                    archive_funcs.make_archive(os.getcwd(), paths, command if command == 'zip' else 'gztar', flag[0])    #type: ignore
                 else:
-                    result = funcs[command](cur_path=os.getcwd(), paths=paths, flags=flag)
-                    if result: 
+                    result = funcs[command](cur_path=os.getcwd(), paths=paths, flags=flag[0])                            #type: ignore
+                    if result:
                         os.chdir(result)
             except KeyError:
-                print(f"Unknown command: {command}")
+                print(f"Неизвестная комманда: {command}")
             except IndexError:
-                print(f"Unknow1n command: {flag}")
+                print(f"Неизвестная комманда: {flag}")
         print()
 
     print(f"{Color.RESET}Завершение работы")
-    # loger.info("Result: Completion of work")
+    logger.info("[EXIT]")
 
 
 if __name__ == "__main__":
