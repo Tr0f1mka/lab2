@@ -29,13 +29,12 @@ def make_archive(cur_path: str, paths: list[str], mode: str, flags: str) -> None
 
     os.chdir(cur_path)
 
-    check_flags(flags, '')
+    check_flags(flags, '')                       # Проверка флагов и путей
     paths = check_paths(paths, -2)
-
     source = paths[0]
     target = paths[1]
 
-    shutil.make_archive(target, mode, source)
+    shutil.make_archive(target, mode, source)     # Архивация источника
 
 
 @create_log
@@ -50,8 +49,7 @@ def unpack_archive(cur_path: str, paths: list[str], flags: str) -> None:
 
     os.chdir(cur_path)
 
-    check_flags(flags, "")
-
+    check_flags(flags, "")                  # Проверка флагов и путей
     paths = check_paths(paths, 1)
 
-    shutil.unpack_archive(paths[0])
+    shutil.unpack_archive(paths[0])         # Разархивация

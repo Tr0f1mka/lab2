@@ -50,11 +50,11 @@ def ls(cur_path: str, paths: list[str], flags: str) -> None:
 
     os.chdir(cur_path)
 
-    check_flags(flags, "l")
+    check_flags(flags, "l")                        # Проверка флагов и путей
     paths = check_paths(paths, 0)
     paths = paths if paths else [os.getcwd()]
 
-    if flags == "":
+    if flags == "":                                # Вывод без флага
         for path in paths:
             print(path)
             for file in os.listdir(path):
@@ -62,7 +62,7 @@ def ls(cur_path: str, paths: list[str], flags: str) -> None:
                     print(f"   {Color.DIR}{file}{Color.RESET}")
                 else:
                     print(f"   {Color.FILE}{file}{Color.RESET}")
-    else:
+    else:                                      # Вывод с флагом
         for path in paths:
             print(path)
             for file in os.listdir(path):
@@ -77,7 +77,6 @@ def ls(cur_path: str, paths: list[str], flags: str) -> None:
                 #файлы - зелёные символы без фона
                 else:
                     print(f"   {permission}  {size:>12}  {change_time}  {Color.FILE}{file}{Color.RESET}")
-                # print(stats, type(stats))
 
 
 @create_log
@@ -92,10 +91,10 @@ def cd(cur_path: str, paths: list[str], flags: str) -> str:
 
     os.chdir(cur_path)
 
-    check_flags(flags, "")
+    check_flags(flags, "")                # Проверка флагов и путей
     paths = check_paths(paths, 1)
-    os.chdir(paths[0])
 
+    os.chdir(paths[0])                    # Переход в целевую директорию
     return os.getcwd()
 
 
@@ -111,10 +110,10 @@ def cat(cur_path: str, paths: list[str], flags: str) -> None:
 
     os.chdir(cur_path)
 
-    check_flags(flags, "")
+    check_flags(flags, "")                    # Проверка флагов и путей
     paths = check_paths(paths, -1)
 
-    for path in paths:
+    for path in paths:                        # Чтение и вывод файлов
         print(path)
         with open(path, 'r', encoding='utf-8') as f:
             for line in f.readlines():

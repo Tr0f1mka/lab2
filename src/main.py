@@ -7,11 +7,14 @@ import src.format_funcs as format_funcs
 import src.archive_funcs as archive_funcs
 from src.patterns import Color
 
+
+
 """
 ------------------------
 ------Главный файл------
 ------------------------
 """
+
 
 
 """----Словарь функций-----"""
@@ -25,9 +28,6 @@ funcs = {"ls"    : read_funcs.ls,
          "unzip" : archive_funcs.unpack_archive,
          "untar" : archive_funcs.unpack_archive
         }
-
-# path+flag - ls, cp, rm, cd, cat, mv, unzip, untar
-# path+mode - zip, tar
 
 
 
@@ -43,6 +43,7 @@ def start() -> None:
     print("TR0F1MKASOFT [Version 0.0.0.1]")
     print("Корпорация TR0F1MKASOFT (TR0F1MKASOFT Corporation). Все права защищены")
     print()
+
 
 
 def help():
@@ -65,6 +66,7 @@ def help():
     print(f'{Color.INPUT}untar <path>{Color.RESET} - разархивирует указанный tar.gz-архив в рабочую директорию')
 
 
+
 def main() -> None:
     """
     Обязательнная составляющая программ, которые сдаются. Является точкой входа в приложение
@@ -73,30 +75,32 @@ def main() -> None:
 
     start()
 
-    while ((cin_str := user_input()) != "exit"):
+    try:
+        while ((cin_str := user_input()) != "exit"):
 
-        if cin_str == "help":
-            help()
-        elif cin_str == "":
-            continue
-        else:                              #если не справка - парсим ввод и ищем команду
-            # print(2)
-            paths, flag = parser(cin_str)
-            # print(paths, flag)
-            try:
-                command = paths.pop(0)
-                # result = funcs[command](cur_path=os.getcwd(), paths=paths, flags=flag)
-                if command == 'zip' or command == 'tar':
-                    archive_funcs.make_archive(os.getcwd(), paths, command if command == 'zip' else 'gztar', flag[0])    #type: ignore
-                else:
-                    result = funcs[command](cur_path=os.getcwd(), paths=paths, flags=flag[0])                            #type: ignore
-                    if result:
-                        os.chdir(result)
-            except KeyError:
-                print(f"Неизвестная комманда: {command}")
-            except IndexError:
-                print(f"Неизвестная комманда: {flag}")
-        print()
+            if cin_str == "help":
+                help()
+            elif cin_str == "":
+                continue
+            else:                              #если не справка - парсим ввод и ищем команду
+                paths, flag = parser(cin_str)
+
+                try:
+                    command = paths.pop(0)
+
+                    if command == 'zip' or command == 'tar':                # Архивы обрабатываются отдельно из-за другой сигнатуры
+                        archive_funcs.make_archive(cur_path = os.getcwd(), paths = paths, mode = command if command == 'zip' else 'gztar', flags = flag[0])    #type: ignore
+                    else:
+                        result = funcs[command](cur_path=os.getcwd(), paths=paths, flags=flag[0])                            #type: ignore
+                        if result:                                          # Переход в новую директорию(при необходимости)
+                            os.chdir(result)
+                except KeyError:
+                    print(f"Неизвестная комманда: {command}")
+                except IndexError:
+                    print(f"Неизвестная комманда: {flag}")
+            print()
+    except(KeyboardInterrupt):
+        print("\n")
 
     print(f"{Color.RESET}Завершение работы")
     logger.info("[EXIT]")

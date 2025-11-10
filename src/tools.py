@@ -79,7 +79,7 @@ def normalization_path(bad_path: str) -> str:
     """
     Нормализует путь, убирая .. и ~
     :param bad_path: Строка - путь
-    :return: Строка - абсолютный путь
+    :return: Строка - обработанный путь
     """
 
     bad_path = bad_path.replace('\\', '/').strip()      #меняем разделители на нормальные

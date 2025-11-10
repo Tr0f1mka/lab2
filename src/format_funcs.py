@@ -19,7 +19,7 @@ from pygame import mixer       #type: ignore
 """--Загрузка музыки---"""
 
 mixer.init()
-music1 = mixer.Sound(os.path.abspath("src/music/song.ogg"))
+music1 = mixer.Sound(os.path.abspath("src/music/rm_parent_dir_error.ogg"))
 
 
 
@@ -38,23 +38,23 @@ def cp(cur_path: str, paths: list[str], flags: str) -> None:
 
     os.chdir(cur_path)
 
-    check_flags(flags, "r")
+    check_flags(flags, "r")                                      # Проверки флагов и путей
     paths = check_paths(paths, 2)
     source = paths[0]
     target = paths[1]
-    if source.split(os.sep)[-1] != target.split(os.sep)[-1]:
+    if source.split(os.sep)[-1] != target.split(os.sep)[-1]:     # Доработка целевого пути(если в конце не указано название источника)
         target = os.path.join(target, source.split(os.sep)[-1])
 
 
-    if flags == "":
+    if flags == "":                                              # Копирование:
         if os.path.isdir(source):
-            if not(os.listdir(source)):
+            if not(os.listdir(source)):                          # пустой папки
                 shutil.copytree(source, target)
             else:
                 raise LessRFlagError
-        else:
+        else:                                                    # файла
             shutil.copy2(source, target)
-    else:
+    else:                                                        # непустой директории
         shutil.copytree(source, target)
 
 
@@ -70,12 +70,12 @@ def mv(cur_path: str, paths: list[str], flags: str) -> None:
 
     os.chdir(cur_path)
 
-    check_flags(flags, "")
+    check_flags(flags, "")                                       # Проверки флагов и путей
     paths = check_paths(paths, 2)
     source = paths[0]
     target = paths[1]
 
-    shutil.move(source, target)
+    shutil.move(source, target)                                  # Перемещение источника в назначение
 
 
 @create_log
@@ -90,20 +90,22 @@ def rm(cur_path: str, paths: list[str], flags: str) -> None:
 
     os.chdir(cur_path)
 
-    check_flags(flags, "r")
+    check_flags(flags, "r")                                      # Проверки флагов и путей
     paths = check_paths(paths, -1)
 
-    if flags == "":
+    if flags == "":                                              # Удаление:
         for path in paths:
-            print(f"Вы уверены, что хотите удалить файл {path}? [y/n]")     #запрос подтверждения
+
+            print(f"Вы уверены, что хотите удалить файл {path}? [y/n]")
             ans = user_input()
+
             if ans == "y":
                 if os.path.isdir(path):
-                    if not(os.listdir(path)):
+                    if not(os.listdir(path)):                    # пустой директории
                         shutil.rmtree(path)
                     else:
                         raise LessRFlagError
-                else:
+                else:                                            # файла
                     os.remove(path)
             else:
                 logger.info("[RESULT] <rm> Cancel delete")
@@ -114,14 +116,17 @@ def rm(cur_path: str, paths: list[str], flags: str) -> None:
                 print(f"{Color.ERROR}Ошибка:{Color.RESET} нельзя удалять корневой каталог")
                 logger.error("[RESULT] <rm> cancel remove root directory")
                 continue
-            if not (os.getcwd()).startswith(os.path.abspath(path)):              #если путь не является началом текущей рабочей директории, пытаемся удалить
-                print(f"Вы уверены, что хотите удалить папку {path}? [y/n]")     #запрос подтверждения удаления
+
+            if not (os.getcwd()).startswith(os.path.abspath(path)):              # Если путь не является началом текущей рабочей директории, пытаемся удалить
+
+                print(f"Вы уверены, что хотите удалить папку {path}? [y/n]")
                 ans = user_input()
+
                 if ans == 'y':
-                    shutil.rmtree(path)
+                    shutil.rmtree(path)                          # непустой директории
                 else:
                     logger.info("[RESULT] <rm> Cancel delete")
-            else:
+            else:                                                # Удаление родительской директории - ошибка
                 mixer.stop()
                 music1.play()
                 print(f"{Color.ERROR}Ошибка:{Color.RESET} нельзя отворачиваться от семьи(нельзя удалять родительский каталог)")
